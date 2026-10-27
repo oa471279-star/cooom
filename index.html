@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Balance</title>
+  <meta name="description" content="Balance — personal finance and study planner for students.">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <noscript><p class="notice">Balance needs JavaScript. / يحتاج Balance إلى تفعيل جافاسكربت.</p></noscript>
+
+  <div id="boot" class="boot" role="status" data-i18n="common.loading">…</div>
+
+  <!-- ===================== Authentication ===================== -->
+  <main id="auth-screen" class="auth-screen" hidden>
+    <div class="auth-card">
+      <div class="auth-top">
+        <div class="brand"><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#target"/></svg><span>Balance</span></div>
+        <button type="button" id="auth-lang" class="btn btn-ghost btn-sm"></button>
+      </div>
+      <p class="muted" data-i18n="auth.tagline"></p>
+      <p id="auth-msg" class="notice" role="alert" hidden></p>
+
+      <div class="tabs" id="auth-tabs" role="tablist">
+        <button type="button" role="tab" data-auth-tab="login" data-i18n="auth.login"></button>
+        <button type="button" role="tab" data-auth-tab="register" data-i18n="auth.register"></button>
+      </div>
+
+      <form id="form-login" class="auth-panel" data-panel="login" novalidate>
+        <div class="field"><label for="login-email" data-i18n="auth.email"></label>
+          <input id="login-email" name="email" type="email" autocomplete="email" dir="ltr" required></div>
+        <div class="field"><label for="login-password" data-i18n="auth.password"></label>
+          <input id="login-password" name="password" type="password" autocomplete="current-password" dir="ltr" required></div>
+        <button class="btn btn-primary btn-block" type="submit" data-i18n="auth.login"></button>
+        <p class="center"><button type="button" class="link" data-auth-tab="forgot" data-i18n="auth.forgot_link"></button></p>
+      </form>
+
+      <form id="form-register" class="auth-panel" data-panel="register" novalidate hidden>
+        <div class="field"><label for="reg-name" data-i18n="auth.display_name"></label>
+          <input id="reg-name" name="display_name" type="text" maxlength="60" autocomplete="name" required></div>
+        <div class="field"><label for="reg-email" data-i18n="auth.email"></label>
+          <input id="reg-email" name="email" type="email" autocomplete="email" dir="ltr" required></div>
+        <div class="field"><label for="reg-password" data-i18n="auth.password"></label>
+          <input id="reg-password" name="password" type="password" autocomplete="new-password" minlength="8" dir="ltr" required>
+          <small data-i18n="auth.password_hint"></small></div>
+        <div class="field"><label for="reg-confirm" data-i18n="auth.confirm_password"></label>
+          <input id="reg-confirm" name="confirm" type="password" autocomplete="new-password" dir="ltr" required></div>
+        <button class="btn btn-primary btn-block" type="submit" data-i18n="auth.register"></button>
+      </form>
+
+      <form id="form-forgot" class="auth-panel" data-panel="forgot" novalidate hidden>
+        <h2 data-i18n="auth.forgot_title"></h2>
+        <p class="muted" data-i18n="auth.forgot_text"></p>
+        <div class="field"><label for="forgot-email" data-i18n="auth.email"></label>
+          <input id="forgot-email" name="email" type="email" autocomplete="email" dir="ltr" required></div>
+        <button class="btn btn-primary btn-block" type="submit" data-i18n="auth.send_reset"></button>
+        <p class="center"><button type="button" class="link" data-auth-tab="login" data-i18n="auth.back_login"></button></p>
+      </form>
+
+      <form id="form-recovery" class="auth-panel" data-panel="recovery" novalidate hidden>
+        <h2 data-i18n="auth.recovery_title"></h2>
+        <div class="field"><label for="rec-password" data-i18n="auth.new_password"></label>
+          <input id="rec-password" name="password" type="password" autocomplete="new-password" minlength="8" dir="ltr" required></div>
+        <div class="field"><label for="rec-confirm" data-i18n="auth.confirm_password"></label>
+          <input id="rec-confirm" name="confirm" type="password" autocomplete="new-password" dir="ltr" required></div>
+        <button class="btn btn-primary btn-block" type="submit" data-i18n="auth.update_password"></button>
+      </form>
+
+      <div class="auth-panel" data-panel="config" hidden>
+        <h2 data-i18n="auth.config_title"></h2>
+        <p data-i18n="auth.config_text"></p>
+        <p><code>js/config.js</code></p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================== Application shell ===================== -->
+  <div id="app" class="app" hidden>
+    <aside id="sidebar" class="sidebar" aria-label="Main">
+      <div class="brand"><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#target"/></svg><span>Balance</span></div>
+      <nav id="nav">
+        <a href="#/dashboard" data-route="dashboard"><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#home"/></svg><span data-i18n="nav.dashboard"></span></a>
+        <a href="#/money" data-route="money"><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#wallet"/></svg><span data-i18n="nav.money"></span></a>
+        <a href="#/budgets" data-route="budgets"><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#target"/></svg><span data-i18n="nav.budgets"></span></a>
+        <a href="#/study" data-route="study"><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#book"/></svg><span data-i18n="nav.study"></span></a>
+        <a href="#/daily" data-route="daily"><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#calendar"/></svg><span data-i18n="nav.daily"></span></a>
+        <a href="#/reports" data-route="reports"><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#chart"/></svg><span data-i18n="nav.reports"></span></a>
+        <a href="#/settings" data-route="settings"><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#settings"/></svg><span data-i18n="nav.settings"></span></a>
+        <a href="#/admin" data-route="admin" id="nav-admin" hidden><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#shield"/></svg><span data-i18n="nav.admin"></span></a>
+      </nav>
+      <div class="sidebar-foot">
+        <button type="button" id="btn-lang" class="btn btn-ghost btn-block"><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#globe"/></svg><span></span></button>
+        <button type="button" id="btn-theme" class="btn btn-ghost btn-block"><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#moon"/></svg><span></span></button>
+        <button type="button" id="btn-logout" class="btn btn-ghost btn-block"><svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#logout"/></svg><span data-i18n="nav.logout"></span></button>
+      </div>
+    </aside>
+    <div id="scrim" class="scrim" hidden></div>
+
+    <div class="main-col">
+      <header class="topbar">
+        <button type="button" id="btn-menu" class="btn btn-ghost btn-icon" aria-controls="sidebar" aria-expanded="false" data-i18n-aria="nav.menu">
+          <svg class="icon" aria-hidden="true"><use href="assets/icons/sprite.svg#menu"/></svg>
+        </button>
+        <h1 id="page-title"></h1>
+        <span id="user-chip" class="user-chip"></span>
+      </header>
+      <main id="view" class="view" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <dialog id="modal" aria-modal="true"></dialog>
+  <dialog id="confirm" aria-modal="true">
+    <form method="dialog">
+      <p id="confirm-msg"></p>
+      <div class="modal-actions">
+        <button value="cancel" class="btn btn-ghost" data-i18n="common.cancel"></button>
+        <button value="ok" class="btn btn-danger" data-i18n="common.delete"></button>
+      </div>
+    </form>
+  </dialog>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <!-- Pinned CDN builds (no build step needed for GitHub Pages) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
